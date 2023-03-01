@@ -1,0 +1,101 @@
+<!DOCTYpE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tigrigna to latin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h2>Tigrigna to Latin alphabets</h2>
+    <h3>write some text</h3>
+    <div class="card-container">
+      <textarea name="tigrigna" id="input" cols="40" rows="25"
+        placeholder="skrive noe tekst her på tigrigna"></textarea>
+      <img src="translator.png">
+      <textarea name="latin" id="output" cols="40" rows="25"></textarea>
+    </div>
+    <div class="btn-container">
+      <button onclick="convert()">Convert</button>
+      <button onclick="clearOutput()">Clear</button>
+    </div>
+  </div>
+  <script>
+
+    let alphabets = {
+
+      'ሀ': 'he', 'ሁ': 'hu', 'ሂ': 'hi', 'ሃ': 'ha', 'ሄ': 'hie', 'ህ': 'h', 'ሆ': 'ho',
+      'ለ': 'le', 'ሉ': 'lu', 'ሊ': 'li', 'ላ': 'la', 'ሌ': 'lie', 'ል': 'l', 'ሎ': 'lo',
+      'ከ': 'ke', 'ኩ': 'ku', 'ኪ': 'ki', 'ካ': 'ka', 'ኬ': 'kie', 'ክ': 'k', 'ኮ': 'ko',
+      'ሐ': 'He', 'ሑ': 'Hu', 'ሒ': 'Hi', 'ሓ': 'Ha', 'ሔ': 'Hie', 'ሕ': 'H', 'ሖ': 'Ho',
+      'መ': 'me', 'ሙ': 'mu', 'ሚ': 'mi', 'ማ': 'ma', 'ሜ': 'mie', 'ም': 'm', 'ሞ': 'mo',
+      'ሠ': 'Se', 'ሡ': 'Su', 'ሢ': 'Si', 'ሣ': 'Sa', 'ሤ': 'Sie', 'ሥ': 'S', 'ሦ': 'So',
+      'ረ': 're', 'ሩ': 'ru', 'ሪ': 'ri', 'ራ': 'ra', 'ሬ': 'rie', 'ር': 'r', 'ሮ': 'ro',
+      'ሰ': 'se', 'ሱ': 'su', 'ሲ': 'si', 'ሳ': 'sa', 'ሴ': 'sie', 'ስ': 's', 'ሶ': 'so',
+      'ሸ': 'She', 'ሹ': 'Shu', 'ሺ': 'Shi', 'ሻ': 'Sha', 'ሼ': 'Shie', 'ሽ': 'Sh', 'ሾ': 'Sho',
+      'ቀ': 'qe', 'ቁ': 'qu', 'ቂ': 'qi', 'ቃ': 'qa', 'ቄ': 'qie', 'ቅ': 'q', 'ቆ': 'qo',
+      'ቐ': 'Qe', 'ቑ': 'Qu', 'ቒ': 'Qi', 'ቓ': 'Qa', 'ቔ': 'Qie', 'ቕ': 'Q', 'ቖ': 'Qo',
+      'በ': 'be', 'ቡ': 'bu', 'ቢ': 'bi', 'ባ': 'ba', 'ቤ': 'bie', 'ብ': 'b', 'ቦ': 'bo',
+      'ቨ': 've', 'ቩ': 'vu', 'ቪ': 'vi', 'ቫ': 'va', 'ቬ': 'vie', 'ቭ': 'v', 'ቮ': 'vo',
+      'ተ': 'te', 'ቱ': 'tu', 'ቲ': 'ti', 'ታ': 'ta', 'ቴ': 'tie', 'ት': 't', 'ቶ': 'to',
+      'ጠ': 'te', 'ጡ': 'tu', 'ጢ': 'ti', 'ጣ': 'ta', 'ጤ': 'tie', 'ጥ': 't', 'ጦ': 'to',
+      'ቸ': 'che', 'ቹ': 'chu', 'ቺ': 'chi', 'ቻ': 'cha', 'ቼ': 'chie', 'ች': 'ch', 'ቾ': 'cho',
+      'ኀ': 'he', 'ኁ': 'hu', 'ኂ': 'hi', 'ኃ': 'ha', 'ኄ': 'hie', 'ኅ': 'h', 'ኆ': 'ho',
+      'ነ': 'ne', 'ኑ': 'nu', 'ኒ': 'ni', 'ና': 'na', 'ኔ': 'nie', 'ን': 'n', 'ኖ': 'no',
+      'ኘ': 'Ne', 'ኙ': 'Nu', 'ኚ': 'Ni', 'ኛ': 'Na', 'ኜ': 'Nie', 'ኝ': 'N', 'ኞ': 'No',
+      'ኸ': 'Ke', 'ኹ': 'Ku', 'ኺ': 'Ki', 'ኻ': 'Ka', 'ኼ': 'Kie', 'ኽ': 'K', 'ኾ': 'Ko',
+      'ወ': 'we', 'ዉ': 'wu', 'ዊ': 'wi', 'ዋ': 'wa', 'ዌ': 'wie', 'ው': 'w', 'ዎ': 'wo',
+      'ዘ': 'ze', 'ዙ': 'zu', 'ዚ': 'zi', 'ዛ': 'za', 'ዜ': 'zie', 'ዝ': 'z', 'ዞ': 'zo',
+      'የ': 'ye', 'ዩ': 'yu', 'ዪ': 'yi', 'ያ': 'ya', 'ዬ': 'yie', 'ይ': 'y', 'ዮ': 'yo',
+      'ደ': 'de', 'ዱ': 'du', 'ዲ': 'di', 'ዳ': 'da', 'ዴ': 'die', 'ድ': 'd', 'ዶ': 'do',
+      'ጀ': 'je', 'ጁ': 'ju', 'ጂ': 'ji', 'ጃ': 'ja', 'ጄ': 'jie', 'ጅ': 'j', 'ጆ': 'jo',
+      'ገ': 'ge', 'ጉ': 'gu', 'ጊ': 'gi', 'ጋ': 'ga', 'ጌ': 'gie', 'ግ': 'g', 'ጎ': 'go',
+      'ጸ': 'xe', 'ጹ': 'xu', 'ጺ': 'xi', 'ጻ': 'xa', 'ጼ': 'xie', 'ጽ': 'x', 'ጾ': 'xo',
+      'ፈ': 'fe', 'ፉ': 'fu', 'ፊ': 'fi', 'ፋ': 'fa', 'ፌ': 'fie', 'ፍ': 'f', 'ፎ': 'fo',
+      'ፐ': 'pe', 'ፑ': 'pu', 'ፒ': 'pi', 'ፓ': 'pa', 'ፔ': 'pie', 'ፕ': 'p', 'ፖ': 'po',
+      'ጰ': 'Pe', 'ጱ': 'Pu', 'ጲ': 'Pi', 'ጳ': 'Pa', 'ጴ': 'Pie', 'ጵ': 'P', 'ጶ': 'Po',
+      'ዠ': 'Ze', 'ዡ': 'Zu', 'ዢ': 'Zi', 'ዣ': 'Za', 'ዤ': 'Zie', 'ዥ': 'Z', 'ዦ': 'Zo',
+      'አ': 'e', 'ኡ': 'u', 'ኢ': 'i', 'ኣ': 'a', 'ኤ': 'ie', 'እ': 'E', 'ኦ': 'o',
+      'ዐ': 'e', 'ዑ': 'u', 'ዒ': 'i', 'ዓ': 'a', 'ዔ': 'ie', 'ዕ': 'E', 'ዖ': 'o',
+      '።': '.', ':': ';', '፣': ',', '፥': ':', '፦': ';-', '፤': '::', '.': '..',
+      'ቈ': 'que', 'ቊ': 'qui', 'ቋ': 'qua', 'ቌ': 'quie', 'ቍ': 'qW',
+      'ዀ': 'Kue', 'ዂ': 'Kui', 'ዃ': 'Kua', 'ዄ': 'Kuie', 'ዅ': 'KW',
+      'ኰ': 'kue', 'ኲ': 'kui', 'ኳ': 'kua', 'ኴ': 'kuie', 'ኵ': 'kW',
+      'ኈ': 'hue', 'ኊ': 'hui', 'ኋ': 'hua', 'ኌ': 'huie', 'ኍ': 'hW',
+      'ጐ': 'gue', 'ጒ': 'gui', 'ጓ': 'gua', 'ጔ': 'guie', 'ጕ': 'gW',
+      '፩': '1', '፪': '2', '፫': '3', '፬': '4', '፭': '5', '፮': '6', '፯': '7', '፰': '8', '፱': '9',
+      '፲': '1', '፳': '2', '፴': '3', '፵': '4', '፶': '5', '፷': '6', '፸': '7', '፹': '8', '፺': '9',
+      '፲ ': '10', '፳ ': '20', '፴ ': '30', '፵ ': '40', '፶ ': '50', '፷ ': '60', '፸ ': '70', '፹ ': '80', '፺ ': '90',
+
+    }
+    let modifiedtext = { 'ኤርትራ': 'Eritrea' }
+    function translate(word) {
+      let translation = "";
+      for (let i = 0; i < word.length; i++) {
+        let char = word[i];
+        translation += alphabets[char] ? alphabets[char] : char;
+      }
+      return translation;
+    }
+    var result;
+    var test;
+    function convert() {
+      result = translate(document.getElementById("input").value);
+      result = document.getElementById("output").value = result;
+    }
+
+
+    function clearOutput() {
+      document.getElementById("output").value = "";
+      document.getElementById("input").value = "";
+    }
+
+  </script>
+</body>
+<footer> Created by <a href="#">Naib</a></footer>
+
+</html>
