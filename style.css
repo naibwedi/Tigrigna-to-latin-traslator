@@ -47,6 +47,11 @@ img {
 h2,
 h3 {
     text-align: center;
+    color: black;
+
+}
+span{
+ color: rgb(16, 80, 255);
 }
 
 .btn-container {
