@@ -14,7 +14,7 @@
     <h2>Tigrigna to Latin alphabets</h2>
     <h3>This website is made to translate Geez texts and numbers to latin alphabets and numbers.
       <br>
-     <span>እዚ መርበብ ሓበሬታ ብትግርኛ ዝተጻሕፉ ጽሑፋትን ቁጽርታትን ናብ ፊደላትን ቁጽርታትን ላቲን ንምትርጓም ዝተሰርሐ እዩ።</span> 
+      <span>እዚ መርበብ ሓበሬታ ብትግርኛ ዝተጻሕፉ ጽሑፋትን ቁጽርታትን ናብ ፊደላትን ቁጽርታትን ላቲን ንምትርጓም ዝተሰርሐ እዩ።</span>
     </h3>
     <div class="card-container">
       <textarea name="tigrigna" id="input" cols="40" rows="25"
@@ -90,6 +90,15 @@
       result = translate(document.getElementById("input").value);
       result = document.getElementById("output").value = result;
     }
+    // Execute a function when the user presses a key on the keyboard
+    document.getElementById("input").addEventListener("keypress", function (event) {
+      // If the user presses the "Enter" key on the keyboard
+      if (event.key === "Enter") {
+        result = translate(document.getElementById("input").value);
+      result = document.getElementById("output").value = result;
+      
+      }
+    });
 
 
     function clearOutput() {
