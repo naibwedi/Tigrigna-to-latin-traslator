@@ -1,5 +1,4 @@
-html,
-body {
+html,body {
     height: 100%;
 }
 
@@ -55,7 +54,7 @@ span{
 }
 
 .btn-container {
-    padding-top: 20px;
+    margin: 2vh 0vh 4vh 0vh;
     text-align: center;
     align-items: center;
 }
@@ -78,30 +77,61 @@ button:hover {
     width: 30vw;
 }
 footer {
-    padding-top: 6vh;
+    padding-top: 5vh;
 }
 a{
     color: rgb(51, 248, 248);
 }
 
 @media only screen and (max-width: 600px) {
+   html,body{
+    background: url(cool-background\ \(2\).png) no-repeat center center fixed;
+  background-size: cover;
+  height: 100%;
+  overflow: scroll;
+   }
+
     .container{
-        height: 100%;
-         margin-top: 4em;
-        margin: 0;
-        width: 95%;
-        padding: 0vw 1vw;
+        min-height: 100%;
+        padding: 0em 1em;
+    /*     width: 100%; */
+        border-radius: 1em;
+        margin-top: 12vh;
+       padding-bottom: 1em;
+    }
+   
+    h2{
+      
+  
+      margin: 0;
+    }
+    h2,h3{
+        /* margin: 0vh 0vw;
+        padding: 0; */
+       /*  padding: 0.2em 0; */
+    }
+    h3 {
+       /*  padding: 0vh 0vw 0vh 0vw; */
     }
    .card-container{
     flex-direction: column;
     padding: 0;
+    border-radius: 1em;
    }
    #input,#output{
-    height: 35vh;
-    width: 75vw;
+    height: 30vh;
+    width: 80vw;
+}
+#output{
+    height: 20vh;
+    width: 80vw;
+}
+img{
+    width: 10vw;
 }
 .btn-container{
-    padding: 2vh 0vh;
+    padding: 0vh 0vh;
+    margin-bottom: 0;
 }
 footer{
     padding: 0.5em;
