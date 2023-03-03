@@ -92,18 +92,19 @@ a{
    }
 
     .container{
-        min-height: 100%;
-        padding: 0em 1em;
+        height: 100%;
+      /*   padding: 0;
+        margin: 0; */
     /*     width: 100%; */
         border-radius: 1em;
-      /*   margin-top: 7vh; */
-       padding-bottom: 1em;
+       /*  margin-top:10em;
+       padding-top: 0em; */
     }
    
     h2{
       
-  padding: auto ;
-     /*  margin: 0; */
+      padding: 0 ;
+      margin: 0;
     }
     h2,h3{
         /* margin: 0vh 0vw;
