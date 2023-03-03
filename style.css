@@ -96,14 +96,14 @@ a{
         padding: 0em 1em;
     /*     width: 100%; */
         border-radius: 1em;
-        margin-top: 12vh;
+      /*   margin-top: 7vh; */
        padding-bottom: 1em;
     }
    
     h2{
       
-  
-      margin: 0;
+  padding: auto ;
+     /*  margin: 0; */
     }
     h2,h3{
         /* margin: 0vh 0vw;
@@ -119,13 +119,13 @@ a{
     border-radius: 1em;
    }
    #input,#output{
-    height: 30vh;
+    height: 50vh;
     width: 80vw;
 }
 #output{
     height: 20vh;
     width: 80vw;
-}
+} */
 img{
     width: 10vw;
 }

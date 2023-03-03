@@ -23,7 +23,7 @@
       <textarea name="latin" id="output" cols="40" rows="25"></textarea>
     </div>
     <div class="btn-container">
-      <button onclick="convert()">Convert</button>
+      <button id="convert">Convert</button>
       <button onclick="clearOutput()">Clear</button>
     </div>
   </div>
@@ -86,17 +86,44 @@
     }
     var result;
     var test;
-    function convert() {
-      result = translate(document.getElementById("input").value);
-      result = document.getElementById("output").value = result;
+
+
+    // Call the function on load and resize
+
+ 
+    window.addEventListener('load', function() {
+  function removeElementOnSmallScreens() {
+    const element = document.getElementById('output');
+    if (window.innerWidth < 600 && element) {
+      element.style.display = 'none';
+      document.getElementById("convert").addEventListener('click', function() {
+        const result = translate(document.getElementById("input").value);
+        document.getElementById("input").value = result;
+      });
     }
+    else {
+      element.style.display = 'block';
+      document.getElementById("convert").addEventListener('click', function() {
+        const result = translate(document.getElementById("input").value);
+        document.getElementById("output").value = result;
+      });
+    }
+  }
+  
+  removeElementOnSmallScreens();
+  window.addEventListener('resize', removeElementOnSmallScreens);
+});
+
+
+
+
     // Execute a function when the user presses a key on the keyboard
     document.getElementById("input").addEventListener("keypress", function (event) {
       // If the user presses the "Enter" key on the keyboard
       if (event.key === "Enter") {
         result = translate(document.getElementById("input").value);
-      result = document.getElementById("output").value = result;
-      
+        result = document.getElementById("output").value = result;
+
       }
     });
 
