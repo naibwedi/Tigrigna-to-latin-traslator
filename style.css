@@ -105,12 +105,12 @@ a{
     /*     width: 100%; */
         border-radius: 1em;
          margin-top:1em;
-       padding-top: 0em;
+       padding: 1vw 0em;
     }
    
     h2{
       font-size: 6vw;
-       padding: 0 ;
+       padding: 1vh 0.5vw ;
       margin: 0; 
       font-weight: 700;
     }
