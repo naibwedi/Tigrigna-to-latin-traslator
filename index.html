@@ -1,140 +1,312 @@
-<!DOCTYpE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tigrigna to latin</title>
+  <title>Tigrigna → Latin Translator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-  <div class="container">
-    <h2>Tigrigna to Latin alphabets</h2>
-    <h3>This website is made to translate Geez texts and numbers to latin alphabets and numbers.
-      <br>
-      <span>እዚ መርበብ ሓበሬታ ብትግርኛ ዝተጻሕፉ ጽሑፋትን ቁጽርታትን ናብ ፊደላትን ቁጽርታትን ላቲን ንምትርጓም ዝተሰርሐ እዩ።</span>
-    </h3>
-    <div class="card-container">
-      <textarea name="tigrigna" id="input" cols="40" rows="25"
-        placeholder="skrive noe tekst her på tigrigna"></textarea>
-      <img src="translator.png">
-      <textarea name="latin" id="output" cols="40" rows="25"></textarea>
-    </div>
-    <div class="btn-container">
-      <button id="convert">Convert</button>
-      <button onclick="clearOutput()">Clear</button>
-    </div>
+  <div class="app">
+
+    <!-- ── Header ── -->
+    <header class="header">
+      <div class="header-top">
+        <div class="logo">
+          <div class="logo-icon-wrap">
+            <img src="translator.png" alt="Translator icon" class="logo-icon">
+          </div>
+          <div class="logo-text">
+            <h1>Tigrigna Translator</h1>
+            <p class="subtitle">Geez script &rarr; Latin transliteration</p>
+          </div>
+        </div>
+        <label class="live-toggle" title="Auto-translate as you type">
+          <span class="live-label">Live</span>
+          <span class="toggle-wrap">
+            <input type="checkbox" id="live-mode">
+            <span class="toggle-track">
+              <span class="toggle-thumb"></span>
+            </span>
+          </span>
+        </label>
+      </div>
+      <p class="tigrigna-desc">
+        እዚ መርበብ ሓበሬታ ብትግርኛ ዝተጻሕፉ ጽሑፋትን ቁጽርታትን ናብ ፊደላትን ቁጽርታትን ላቲን ንምትርጓም ዝተሰርሐ እዩ።
+      </p>
+    </header>
+
+    <!-- ── Translator ── -->
+    <main class="translator-card">
+      <div class="panels">
+
+        <!-- Input -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="lang-badge">
+              <span class="lang-flag">🇪🇷</span>
+              <span class="panel-label">Tigrigna &middot; ትግርኛ</span>
+            </div>
+            <span class="stats" id="input-stats">0 words &middot; 0 chars</span>
+          </div>
+          <textarea
+            id="input"
+            placeholder="Type or paste Tigrigna text here…"
+            spellcheck="false"
+          ></textarea>
+          <div class="panel-footer">
+            <button class="btn-ghost" onclick="loadSample()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Try sample
+            </button>
+            <button class="btn-ghost btn-danger" onclick="clearAll()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>
+              Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Arrow divider -->
+        <div class="divider">
+          <button class="btn-arrow" id="convert" title="Translate (Ctrl+Enter)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+          <span class="divider-label">Translate</span>
+          <span class="keyboard-hint">Ctrl&nbsp;+&nbsp;&crarr;</span>
+        </div>
+
+        <!-- Output -->
+        <div class="panel panel-output">
+          <div class="panel-header">
+            <div class="lang-badge">
+              <span class="lang-flag">🔤</span>
+              <span class="panel-label">Latin &middot; Output</span>
+            </div>
+            <span class="stats" id="output-stats">0 words &middot; 0 chars</span>
+          </div>
+          <textarea
+            id="output"
+            placeholder="Translation will appear here…"
+            readonly
+            spellcheck="false"
+          ></textarea>
+          <div class="panel-footer">
+            <button class="btn-ghost btn-copy" id="copy-btn" onclick="copyOutput()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              Copy
+            </button>
+            <button class="btn-ghost btn-share" id="share-btn" onclick="shareOrExport()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              <span id="share-btn-label">Export</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Mobile translate button -->
+      <button class="btn-translate-mobile" id="convert-mobile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+        Translate
+      </button>
+    </main>
+
+    <footer class="footer">
+      Built with care by <a href="#">Naib</a> &nbsp;&middot;&nbsp; Tigrigna&ndash;Latin Transliterator
+    </footer>
+
   </div>
+
+  <!-- Hidden print layout — only visible when printing -->
+  <div id="print-view" aria-hidden="true">
+    <div class="print-header">
+      <div class="print-logo">Tigrigna Translator</div>
+      <p class="print-date" id="print-date"></p>
+    </div>
+    <div class="print-section">
+      <h3>Original &mdash; ትግርኛ</h3>
+      <p id="print-input"></p>
+    </div>
+    <div class="print-divider"></div>
+    <div class="print-section">
+      <h3>Translation &mdash; Latin</h3>
+      <p id="print-output"></p>
+    </div>
+    <div class="print-footer">Generated by Tigrigna Translator &nbsp;&middot;&nbsp; naib</div>
+  </div>
+
   <script>
+    const alphabets = {
+      'ሀ':'he','ሁ':'hu','ሂ':'hi','ሃ':'ha','ሄ':'hie','ህ':'h','ሆ':'ho',
+      'ለ':'le','ሉ':'lu','ሊ':'li','ላ':'la','ሌ':'lie','ል':'l','ሎ':'lo',
+      'ከ':'ke','ኩ':'ku','ኪ':'ki','ካ':'ka','ኬ':'kie','ክ':'k','ኮ':'ko',
+      'ሐ':'He','ሑ':'Hu','ሒ':'Hi','ሓ':'Ha','ሔ':'Hie','ሕ':'H','ሖ':'Ho',
+      'መ':'me','ሙ':'mu','ሚ':'mi','ማ':'ma','ሜ':'mie','ም':'m','ሞ':'mo',
+      'ሠ':'Se','ሡ':'Su','ሢ':'Si','ሣ':'Sa','ሤ':'Sie','ሥ':'S','ሦ':'So',
+      'ረ':'re','ሩ':'ru','ሪ':'ri','ራ':'ra','ሬ':'rie','ር':'r','ሮ':'ro',
+      'ሰ':'se','ሱ':'su','ሲ':'si','ሳ':'sa','ሴ':'sie','ስ':'s','ሶ':'so',
+      'ሸ':'She','ሹ':'Shu','ሺ':'Shi','ሻ':'Sha','ሼ':'Shie','ሽ':'Sh','ሾ':'Sho',
+      'ቀ':'qe','ቁ':'qu','ቂ':'qi','ቃ':'qa','ቄ':'qie','ቅ':'q','ቆ':'qo',
+      'ቐ':'Qe','ቑ':'Qu','ቒ':'Qi','ቓ':'Qa','ቔ':'Qie','ቕ':'Q','ቖ':'Qo',
+      'በ':'be','ቡ':'bu','ቢ':'bi','ባ':'ba','ቤ':'bie','ብ':'b','ቦ':'bo',
+      'ቨ':'ve','ቩ':'vu','ቪ':'vi','ቫ':'va','ቬ':'vie','ቭ':'v','ቮ':'vo',
+      'ተ':'te','ቱ':'tu','ቲ':'ti','ታ':'ta','ቴ':'tie','ት':'t','ቶ':'to',
+      'ጠ':'te','ጡ':'tu','ጢ':'ti','ጣ':'ta','ጤ':'tie','ጥ':'t','ጦ':'to',
+      'ቸ':'che','ቹ':'chu','ቺ':'chi','ቻ':'cha','ቼ':'chie','ች':'ch','ቾ':'cho',
+      'ኀ':'he','ኁ':'hu','ኂ':'hi','ኃ':'ha','ኄ':'hie','ኅ':'h','ኆ':'ho',
+      'ነ':'ne','ኑ':'nu','ኒ':'ni','ና':'na','ኔ':'nie','ን':'n','ኖ':'no',
+      'ኘ':'Ne','ኙ':'Nu','ኚ':'Ni','ኛ':'Na','ኜ':'Nie','ኝ':'N','ኞ':'No',
+      'ኸ':'Ke','ኹ':'Ku','ኺ':'Ki','ኻ':'Ka','ኼ':'Kie','ኽ':'K','ኾ':'Ko',
+      'ወ':'we','ዉ':'wu','ዊ':'wi','ዋ':'wa','ዌ':'wie','ው':'w','ዎ':'wo',
+      'ዘ':'ze','ዙ':'zu','ዚ':'zi','ዛ':'za','ዜ':'zie','ዝ':'z','ዞ':'zo',
+      'የ':'ye','ዩ':'yu','ዪ':'yi','ያ':'ya','ዬ':'yie','ይ':'y','ዮ':'yo',
+      'ደ':'de','ዱ':'du','ዲ':'di','ዳ':'da','ዴ':'die','ድ':'d','ዶ':'do',
+      'ጀ':'je','ጁ':'ju','ጂ':'ji','ጃ':'ja','ጄ':'jie','ጅ':'j','ጆ':'jo',
+      'ገ':'ge','ጉ':'gu','ጊ':'gi','ጋ':'ga','ጌ':'gie','ግ':'g','ጎ':'go',
+      'ጸ':'xe','ጹ':'xu','ጺ':'xi','ጻ':'xa','ጼ':'xie','ጽ':'x','ጾ':'xo',
+      'ፈ':'fe','ፉ':'fu','ፊ':'fi','ፋ':'fa','ፌ':'fie','ፍ':'f','ፎ':'fo',
+      'ፐ':'pe','ፑ':'pu','ፒ':'pi','ፓ':'pa','ፔ':'pie','ፕ':'p','ፖ':'po',
+      'ጰ':'Pe','ጱ':'Pu','ጲ':'Pi','ጳ':'Pa','ጴ':'Pie','ጵ':'P','ጶ':'Po',
+      'ዠ':'Ze','ዡ':'Zu','ዢ':'Zi','ዣ':'Za','ዤ':'Zie','ዥ':'Z','ዦ':'Zo',
+      'አ':'e','ኡ':'u','ኢ':'i','ኣ':'a','ኤ':'ie','እ':'E','ኦ':'o',
+      'ዐ':'e','ዑ':'u','ዒ':'i','ዓ':'a','ዔ':'ie','ዕ':'E','ዖ':'o',
+      '።':'.', ':':';', '፣':',', '፥':':', '፦':';-', '፤':'::', '.':'..',
+      'ቈ':'que','ቊ':'qui','ቋ':'qua','ቌ':'quie','ቍ':'qW',
+      'ዀ':'Kue','ዂ':'Kui','ዃ':'Kua','ዄ':'Kuie','ዅ':'KW',
+      'ኰ':'kue','ኲ':'kui','ኳ':'kua','ኴ':'kuie','ኵ':'kW',
+      'ኈ':'hue','ኊ':'hui','ኋ':'hua','ኌ':'huie','ኍ':'hW',
+      'ጐ':'gue','ጒ':'gui','ጓ':'gua','ጔ':'guie','ጕ':'gW',
+      '፩':'1','፪':'2','፫':'3','፬':'4','፭':'5','፮':'6','፯':'7','፰':'8','፱':'9',
+      '፲':'1','፳':'2','፴':'3','፵':'4','፶':'5','፷':'6','፸':'7','፹':'8','፺':'9',
+      '፲ ':'10','፳ ':'20','፴ ':'30','፵ ':'40','፶ ':'50','፷ ':'60','፸ ':'70','፹ ':'80','፺ ':'90',
+    };
 
-    let alphabets = {
+    const modifiedWords = { 'ኤርትራ': 'Eritrea' };
 
-      'ሀ': 'he', 'ሁ': 'hu', 'ሂ': 'hi', 'ሃ': 'ha', 'ሄ': 'hie', 'ህ': 'h', 'ሆ': 'ho',
-      'ለ': 'le', 'ሉ': 'lu', 'ሊ': 'li', 'ላ': 'la', 'ሌ': 'lie', 'ል': 'l', 'ሎ': 'lo',
-      'ከ': 'ke', 'ኩ': 'ku', 'ኪ': 'ki', 'ካ': 'ka', 'ኬ': 'kie', 'ክ': 'k', 'ኮ': 'ko',
-      'ሐ': 'He', 'ሑ': 'Hu', 'ሒ': 'Hi', 'ሓ': 'Ha', 'ሔ': 'Hie', 'ሕ': 'H', 'ሖ': 'Ho',
-      'መ': 'me', 'ሙ': 'mu', 'ሚ': 'mi', 'ማ': 'ma', 'ሜ': 'mie', 'ም': 'm', 'ሞ': 'mo',
-      'ሠ': 'Se', 'ሡ': 'Su', 'ሢ': 'Si', 'ሣ': 'Sa', 'ሤ': 'Sie', 'ሥ': 'S', 'ሦ': 'So',
-      'ረ': 're', 'ሩ': 'ru', 'ሪ': 'ri', 'ራ': 'ra', 'ሬ': 'rie', 'ር': 'r', 'ሮ': 'ro',
-      'ሰ': 'se', 'ሱ': 'su', 'ሲ': 'si', 'ሳ': 'sa', 'ሴ': 'sie', 'ስ': 's', 'ሶ': 'so',
-      'ሸ': 'She', 'ሹ': 'Shu', 'ሺ': 'Shi', 'ሻ': 'Sha', 'ሼ': 'Shie', 'ሽ': 'Sh', 'ሾ': 'Sho',
-      'ቀ': 'qe', 'ቁ': 'qu', 'ቂ': 'qi', 'ቃ': 'qa', 'ቄ': 'qie', 'ቅ': 'q', 'ቆ': 'qo',
-      'ቐ': 'Qe', 'ቑ': 'Qu', 'ቒ': 'Qi', 'ቓ': 'Qa', 'ቔ': 'Qie', 'ቕ': 'Q', 'ቖ': 'Qo',
-      'በ': 'be', 'ቡ': 'bu', 'ቢ': 'bi', 'ባ': 'ba', 'ቤ': 'bie', 'ብ': 'b', 'ቦ': 'bo',
-      'ቨ': 've', 'ቩ': 'vu', 'ቪ': 'vi', 'ቫ': 'va', 'ቬ': 'vie', 'ቭ': 'v', 'ቮ': 'vo',
-      'ተ': 'te', 'ቱ': 'tu', 'ቲ': 'ti', 'ታ': 'ta', 'ቴ': 'tie', 'ት': 't', 'ቶ': 'to',
-      'ጠ': 'te', 'ጡ': 'tu', 'ጢ': 'ti', 'ጣ': 'ta', 'ጤ': 'tie', 'ጥ': 't', 'ጦ': 'to',
-      'ቸ': 'che', 'ቹ': 'chu', 'ቺ': 'chi', 'ቻ': 'cha', 'ቼ': 'chie', 'ች': 'ch', 'ቾ': 'cho',
-      'ኀ': 'he', 'ኁ': 'hu', 'ኂ': 'hi', 'ኃ': 'ha', 'ኄ': 'hie', 'ኅ': 'h', 'ኆ': 'ho',
-      'ነ': 'ne', 'ኑ': 'nu', 'ኒ': 'ni', 'ና': 'na', 'ኔ': 'nie', 'ን': 'n', 'ኖ': 'no',
-      'ኘ': 'Ne', 'ኙ': 'Nu', 'ኚ': 'Ni', 'ኛ': 'Na', 'ኜ': 'Nie', 'ኝ': 'N', 'ኞ': 'No',
-      'ኸ': 'Ke', 'ኹ': 'Ku', 'ኺ': 'Ki', 'ኻ': 'Ka', 'ኼ': 'Kie', 'ኽ': 'K', 'ኾ': 'Ko',
-      'ወ': 'we', 'ዉ': 'wu', 'ዊ': 'wi', 'ዋ': 'wa', 'ዌ': 'wie', 'ው': 'w', 'ዎ': 'wo',
-      'ዘ': 'ze', 'ዙ': 'zu', 'ዚ': 'zi', 'ዛ': 'za', 'ዜ': 'zie', 'ዝ': 'z', 'ዞ': 'zo',
-      'የ': 'ye', 'ዩ': 'yu', 'ዪ': 'yi', 'ያ': 'ya', 'ዬ': 'yie', 'ይ': 'y', 'ዮ': 'yo',
-      'ደ': 'de', 'ዱ': 'du', 'ዲ': 'di', 'ዳ': 'da', 'ዴ': 'die', 'ድ': 'd', 'ዶ': 'do',
-      'ጀ': 'je', 'ጁ': 'ju', 'ጂ': 'ji', 'ጃ': 'ja', 'ጄ': 'jie', 'ጅ': 'j', 'ጆ': 'jo',
-      'ገ': 'ge', 'ጉ': 'gu', 'ጊ': 'gi', 'ጋ': 'ga', 'ጌ': 'gie', 'ግ': 'g', 'ጎ': 'go',
-      'ጸ': 'xe', 'ጹ': 'xu', 'ጺ': 'xi', 'ጻ': 'xa', 'ጼ': 'xie', 'ጽ': 'x', 'ጾ': 'xo',
-      'ፈ': 'fe', 'ፉ': 'fu', 'ፊ': 'fi', 'ፋ': 'fa', 'ፌ': 'fie', 'ፍ': 'f', 'ፎ': 'fo',
-      'ፐ': 'pe', 'ፑ': 'pu', 'ፒ': 'pi', 'ፓ': 'pa', 'ፔ': 'pie', 'ፕ': 'p', 'ፖ': 'po',
-      'ጰ': 'Pe', 'ጱ': 'Pu', 'ጲ': 'Pi', 'ጳ': 'Pa', 'ጴ': 'Pie', 'ጵ': 'P', 'ጶ': 'Po',
-      'ዠ': 'Ze', 'ዡ': 'Zu', 'ዢ': 'Zi', 'ዣ': 'Za', 'ዤ': 'Zie', 'ዥ': 'Z', 'ዦ': 'Zo',
-      'አ': 'e', 'ኡ': 'u', 'ኢ': 'i', 'ኣ': 'a', 'ኤ': 'ie', 'እ': 'E', 'ኦ': 'o',
-      'ዐ': 'e', 'ዑ': 'u', 'ዒ': 'i', 'ዓ': 'a', 'ዔ': 'ie', 'ዕ': 'E', 'ዖ': 'o',
-      '።': '.', ':': ';', '፣': ',', '፥': ':', '፦': ';-', '፤': '::', '.': '..',
-      'ቈ': 'que', 'ቊ': 'qui', 'ቋ': 'qua', 'ቌ': 'quie', 'ቍ': 'qW',
-      'ዀ': 'Kue', 'ዂ': 'Kui', 'ዃ': 'Kua', 'ዄ': 'Kuie', 'ዅ': 'KW',
-      'ኰ': 'kue', 'ኲ': 'kui', 'ኳ': 'kua', 'ኴ': 'kuie', 'ኵ': 'kW',
-      'ኈ': 'hue', 'ኊ': 'hui', 'ኋ': 'hua', 'ኌ': 'huie', 'ኍ': 'hW',
-      'ጐ': 'gue', 'ጒ': 'gui', 'ጓ': 'gua', 'ጔ': 'guie', 'ጕ': 'gW',
-      '፩': '1', '፪': '2', '፫': '3', '፬': '4', '፭': '5', '፮': '6', '፯': '7', '፰': '8', '፱': '9',
-      '፲': '1', '፳': '2', '፴': '3', '፵': '4', '፶': '5', '፷': '6', '፸': '7', '፹': '8', '፺': '9',
-      '፲ ': '10', '፳ ': '20', '፴ ': '30', '፵ ': '40', '፶ ': '50', '፷ ': '60', '፸ ': '70', '፹ ': '80', '፺ ': '90',
+    const SAMPLE = 'ሰላም ዓለም!\nትግርኛ ቋንቋ ናይ ኤርትራ እዩ።';
 
-    }
-    let modifiedtext = { 'ኤርትራ': 'Eritrea' }
-    function translate(word) {
-      let translation = "";
-      for (let i = 0; i < word.length; i++) {
-        let char = word[i];
-        translation += alphabets[char] ? alphabets[char] : char;
+    function translate(text) {
+      let result = text;
+      for (const [key, val] of Object.entries(modifiedWords)) {
+        result = result.split(key).join(val);
       }
-      return translation;
+      let out = '';
+      for (const char of result) {
+        out += alphabets[char] ?? char;
+      }
+      return out;
     }
-    var result;
-    var test;
 
+    function getStats(text) {
+      const chars = text.length;
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+      return `${words} word${words !== 1 ? 's' : ''} \u00b7 ${chars} char${chars !== 1 ? 's' : ''}`;
+    }
 
-    // Call the function on load and resize
+    const inputEl     = document.getElementById('input');
+    const outputEl    = document.getElementById('output');
+    const inputStats  = document.getElementById('input-stats');
+    const outputStats = document.getElementById('output-stats');
+    const liveModeEl  = document.getElementById('live-mode');
 
- 
-    window.addEventListener('load', function() {
-  function removeElementOnSmallScreens() {
-    const element = document.getElementById('output');
-    if (window.innerWidth < 600 && element) {
-      element.style.display = 'none';
-      document.getElementById("convert").addEventListener('click', function() {
-        const result = translate(document.getElementById("input").value);
-        document.getElementById("input").value = result;
+    let debounceTimer;
+
+    function doTranslate() {
+      const result = translate(inputEl.value);
+      outputEl.value = result;
+      outputStats.textContent = getStats(result);
+    }
+
+    function clearAll() {
+      inputEl.value = '';
+      outputEl.value = '';
+      inputStats.textContent  = getStats('');
+      outputStats.textContent = getStats('');
+      inputEl.focus();
+    }
+
+    function loadSample() {
+      inputEl.value = SAMPLE;
+      inputStats.textContent = getStats(SAMPLE);
+      doTranslate();
+    }
+
+    async function copyOutput() {
+      if (!outputEl.value) return;
+      const btn = document.getElementById('copy-btn');
+      try {
+        await navigator.clipboard.writeText(outputEl.value);
+      } catch {
+        outputEl.select();
+        document.execCommand('copy');
+      }
+      const orig = btn.innerHTML;
+      btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 18 4 13"/></svg> Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+    }
+
+    // On mobile: native share sheet. On desktop: print-to-PDF dialog.
+    async function shareOrExport() {
+      if (!outputEl.value) return;
+
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'Tigrigna Translation',
+            text: outputEl.value,
+          });
+        } catch (e) {
+          if (e.name !== 'AbortError') printAsPDF();
+        }
+      } else {
+        printAsPDF();
+      }
+    }
+
+    function printAsPDF() {
+      document.getElementById('print-input').textContent  = inputEl.value  || '(empty)';
+      document.getElementById('print-output').textContent = outputEl.value || '(empty)';
+      document.getElementById('print-date').textContent   = new Date().toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
       });
+      window.print();
     }
-    else {
-      element.style.display = 'block';
-      document.getElementById("convert").addEventListener('click', function() {
-        const result = translate(document.getElementById("input").value);
-        document.getElementById("output").value = result;
-      });
+
+    // Show "Share" label on devices that support the Web Share API
+    if (navigator.share) {
+      document.getElementById('share-btn-label').textContent = 'Share';
     }
-  }
-  
-  removeElementOnSmallScreens();
-  window.addEventListener('resize', removeElementOnSmallScreens);
-});
 
+    document.getElementById('convert').addEventListener('click', doTranslate);
+    document.getElementById('convert-mobile').addEventListener('click', doTranslate);
 
-
-
-    // Execute a function when the user presses a key on the keyboard
-    document.getElementById("input").addEventListener("keypress", function (event) {
-      // If the user presses the "Enter" key on the keyboard
-      if (event.key === "Enter") {
-        result = translate(document.getElementById("input").value);
-        result = document.getElementById("output").value = result;
-
+    inputEl.addEventListener('input', () => {
+      inputStats.textContent = getStats(inputEl.value);
+      if (liveModeEl.checked) {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(doTranslate, 380);
       }
     });
 
-
-    function clearOutput() {
-      document.getElementById("output").value = "";
-      document.getElementById("input").value = "";
-    }
-
+    inputEl.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        doTranslate();
+      }
+    });
   </script>
 </body>
-<footer> Created by <a href="#">Naib</a></footer>
-
 </html>
